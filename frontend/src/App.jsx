@@ -1,24 +1,24 @@
-import { useEffect, useState } from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { AuthProvider } from "./context/AuthContext";
+import PrivateRoute from "./components/PrivateRoute";
+import Login from "./pages/Login";
+import Usuarios from "./pages/Usuarios";
+import Navbar from "./components/Navbar";
 
 function App() {
-    const [usuarios, setUsuarios] = useState([]);
-
-    useEffect(() => {
-        fetch("http://localhost:8080/api/usuarios")
-            .then(response => response.json())
-            .then(data => setUsuarios(data));
-    }, []);
-
-    return (
-        <div>
-            <h1>Lista de Usuarios</h1>
-            <ul>
-                {usuarios.map(user => (
-                    <li key={user.id}>{user.nombre} {user.apellido} - {user.email}</li>
-                ))}
-            </ul>
-        </div>
-    );
+  return (
+    <AuthProvider>
+      <Router>
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route element={<PrivateRoute />}>
+            <Route path="/usuarios" element={<Usuarios />} />
+          </Route>
+        </Routes>
+      </Router>
+    </AuthProvider>
+  );
 }
 
 export default App;
