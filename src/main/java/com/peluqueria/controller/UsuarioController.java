@@ -10,25 +10,35 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/usuarios")
+@RequestMapping("/api/usuarios")
 public class UsuarioController {
 
     @Autowired
     private UsuarioService usuarioService;
 
+    @PostMapping
+    public ResponseEntity<?> registrarUsuario(@RequestBody Usuario usuario) {
+        try {
+            Usuario nuevoUsuario = usuarioService.registrarUsuario(usuario);
+            return ResponseEntity.ok(nuevoUsuario);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     @GetMapping
-    public List<Usuario> listarUsuarios() {
-        return usuarioService.listarUsuarios();
+    public ResponseEntity<List<Usuario>> listarUsuarios() {
+        List<Usuario> usuarios = usuarioService.listarUsuarios();
+        return ResponseEntity.ok(usuarios);
     }
 
     @GetMapping("/{email}")
-    public ResponseEntity<Usuario> buscarPorEmail(@PathVariable String email) {
+    public ResponseEntity<?> buscarUsuarioPorEmail(@PathVariable String email) {
         Optional<Usuario> usuario = usuarioService.buscarPorEmail(email);
-        return usuario.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
-    }
-
-    @PostMapping
-    public Usuario registrarUsuario(@RequestBody Usuario usuario) {
-        return usuarioService.registrarUsuario(usuario);
+        if (usuario.isPresent()) {
+            return ResponseEntity.ok(usuario.get());
+        } else {
+            return ResponseEntity.status(404).body("Usuario no encontrado con el email: " + email);
+        }
     }
 }

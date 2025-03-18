@@ -31,13 +31,13 @@ public class CitaController {
 
     @GetMapping("/usuario/{usuarioId}")
     public List<Cita> listarCitasPorUsuario(@PathVariable Long usuarioId) {
-        Usuario usuario = new Usuario(usuarioId, null, null, null, null, null, null, null);
+        Usuario usuario = new Usuario(usuarioId); // ✅ Usa el constructor correcto
         return citaService.listarCitasPorUsuario(usuario);
     }
 
     @GetMapping("/peluquera/{peluqueraId}")
     public List<Cita> listarCitasPorPeluquera(@PathVariable Long peluqueraId) {
-        Peluquera peluquera = new Peluquera(peluqueraId, null, null);
+        Peluquera peluquera = new Peluquera(peluqueraId); // ✅ Usa el constructor correcto
         return citaService.listarCitasPorPeluquera(peluquera);
     }
 

@@ -22,4 +22,9 @@ public class Peluquera {
 
     @OneToMany(mappedBy = "peluquera", cascade = CascadeType.ALL)
     private List<Cita> citas;
+
+    // 🚀 Constructor agregado para inicializar solo con el ID
+    public Peluquera(Long id) {
+        this.id = id;
+    }
 }

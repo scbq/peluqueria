@@ -35,4 +35,13 @@ public class Cita {
     public enum EstadoCita {
         RESERVADA, CANCELADA
     }
+
+    // 🚀 Agregamos manualmente estos métodos por si Lombok no los genera
+    public Peluquera getPeluquera() {
+        return peluquera;
+    }
+
+    public LocalDateTime getFechaHora() {
+        return fechaHora;
+    }
 }
