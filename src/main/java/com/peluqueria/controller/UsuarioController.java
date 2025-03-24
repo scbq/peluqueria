@@ -31,7 +31,7 @@ public class UsuarioController {
     @PostMapping("/usuarios")
     public ResponseEntity<?> registrarUsuario(@RequestBody Usuario usuario) {
         try {
-            usuario.setPassword(passwordEncoder.encode(usuario.getPassword())); // Encripta la contraseña
+            usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
             Usuario nuevoUsuario = usuarioService.registrarUsuario(usuario);
             return ResponseEntity.ok(nuevoUsuario);
         } catch (RuntimeException e) {
@@ -57,7 +57,7 @@ public class UsuarioController {
         }
     }
 
-    // 📌 LOGIN (Retorna JWT)
+    // 📌 LOGIN (Retorna JWT + ROL)
     @PostMapping("/auth/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
         if (request.getEmail() == null || request.getPassword() == null) {
@@ -66,9 +66,15 @@ public class UsuarioController {
 
         Optional<Usuario> usuario = usuarioService.buscarPorEmail(request.getEmail());
 
+        System.out.println("Email recibido: " + request.getEmail());
+        System.out.println("Password recibido: " + request.getPassword());
+        System.out.println("Password en BD: " + usuario.get().getPassword());
+        System.out
+                .println("Coinciden?: " + passwordEncoder.matches(request.getPassword(), usuario.get().getPassword()));
+
         if (usuario.isPresent() && passwordEncoder.matches(request.getPassword(), usuario.get().getPassword())) {
             String token = jwtUtil.generateToken(request.getEmail());
-            return ResponseEntity.ok(new AuthResponse(token));
+            return ResponseEntity.ok(new AuthResponse(token, usuario.get().getRole().name()));
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciales incorrectas");
         }

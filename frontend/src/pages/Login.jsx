@@ -20,32 +20,57 @@ export default function Login() {
 
     if (response.ok) {
       const data = await response.json();
-      login(data.token);
-      navigate("/usuarios");
+      login(data.token, data.role);
+      navigate(data.role === "admin" ? "/admin" : "/calendario");
     } else {
-      alert("Error en credenciales");
+      alert("Credenciales incorrectas");
     }
   };
 
   return (
-    <div className="flex justify-center items-center h-screen">
-      <form className="bg-white p-6 rounded-lg shadow-md w-96" onSubmit={handleSubmit}>
-        <h2 className="text-2xl font-bold text-center mb-4">Iniciar Sesión</h2>
-        <input
-          type="email"
-          placeholder="Correo electrónico"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="w-full p-2 mb-3 border rounded"
-        />
-        <input
-          type="password"
-          placeholder="Contraseña"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="w-full p-2 mb-3 border rounded"
-        />
-        <button className="w-full bg-blue-500 text-white p-2 rounded">Ingresar</button>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-300 px-4">
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white p-8 rounded-2xl shadow-xl w-full sm:max-w-md"
+      >
+        <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">
+          Iniciar Sesión
+        </h2>
+
+        <div className="mb-4">
+          <label className="block mb-1 text-sm font-medium text-gray-700">
+            Correo electrónico
+          </label>
+          <input
+            type="email"
+            placeholder="correo@ejemplo.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            required
+          />
+        </div>
+
+        <div className="mb-6">
+          <label className="block mb-1 text-sm font-medium text-gray-700">
+            Contraseña
+          </label>
+          <input
+            type="password"
+            placeholder="••••••••"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            required
+          />
+        </div>
+
+        <button
+          type="submit"
+          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-lg transition duration-300"
+        >
+          Ingresar
+        </button>
       </form>
     </div>
   );
