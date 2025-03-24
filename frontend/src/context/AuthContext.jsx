@@ -1,13 +1,11 @@
-import { createContext, useState, useEffect } from "react";
+import { createContext, useState } from "react";
 
-// Crear el contexto de autenticación
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem("token") || null);
   const [role, setRole] = useState(localStorage.getItem("role") || null);
 
-  // Función para iniciar sesión
   const login = (jwtToken, userRole) => {
     setToken(jwtToken);
     setRole(userRole);
@@ -15,7 +13,6 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem("role", userRole);
   };
 
-  // Función para cerrar sesión
   const logout = () => {
     setToken(null);
     setRole(null);
@@ -23,8 +20,10 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem("role");
   };
 
+  const user = token && role ? { token, role } : null;
+
   return (
-    <AuthContext.Provider value={{ token, role, login, logout }}>
+    <AuthContext.Provider value={{ token, role, user, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

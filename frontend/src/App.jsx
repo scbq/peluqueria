@@ -1,9 +1,15 @@
-import { BrowserRouter as Router, Route, Routes, useLocation } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  useLocation,
+} from "react-router-dom";
 import { AuthProvider, AuthContext } from "./context/AuthContext";
 import PrivateRoute from "./components/PrivateRoute";
 import Login from "./pages/Login";
 import Usuarios from "./pages/Usuarios";
 import AdminDashboard from "./pages/AdminDashboard";
+import Calendario from "./pages/Calendario";
 import Navbar from "./components/Navbar";
 import { useContext } from "react";
 
@@ -21,7 +27,7 @@ function AppRoutes() {
         <Route element={<PrivateRoute />}>
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/usuarios" element={<Usuarios />} />
-          {/* Puedes agregar más rutas privadas aquí */}
+          <Route path="/calendario" element={<Calendario />} />
         </Route>
       </Routes>
     </>

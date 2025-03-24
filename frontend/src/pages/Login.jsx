@@ -10,20 +10,26 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await fetch("http://localhost:8080/api/auth/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, password }),
-    });
 
-    if (response.ok) {
-      const data = await response.json();
-      login(data.token, data.role);
-      navigate(data.role === "admin" ? "/admin" : "/calendario");
-    } else {
-      alert("Credenciales incorrectas");
+    try {
+      const response = await fetch("http://localhost:8080/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        login(data.token, data.role); // 👈 ¡Esto es importante!
+        navigate(data.role === "ADMIN" ? "/admin" : "/calendario");
+      } else {
+        alert("Credenciales incorrectas");
+      }
+    } catch (err) {
+      console.error("Error de login:", err);
+      alert("Ocurrió un error al intentar iniciar sesión.");
     }
   };
 
